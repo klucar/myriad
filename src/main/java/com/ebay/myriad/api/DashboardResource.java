@@ -16,9 +16,9 @@
 package com.ebay.myriad.api;
 
 import com.codahale.metrics.annotation.Timed;
+import com.ebay.myriad.api.model.GetDashboardResponse;
 import com.ebay.myriad.configuration.MyriadConfiguration;
 import com.ebay.myriad.state.SchedulerState;
-import com.ebay.myriad.views.DashboardView;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -27,21 +27,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/")
-@Produces({MediaType.TEXT_HTML})
+@Produces({MediaType.APPLICATION_JSON})
 public class DashboardResource {
-    private MyriadConfiguration cfg;
     private SchedulerState schedulerState;
 
     @Inject
-    public DashboardResource(MyriadConfiguration cfg, SchedulerState schedulerState) {
-        this.cfg = cfg;
+    public DashboardResource(SchedulerState schedulerState) {
         this.schedulerState = schedulerState;
     }
 
     @Timed
     @GET
-    @Produces(MediaType.TEXT_HTML)
-    public DashboardView getDashboard() {
-        return new DashboardView(schedulerState);
+    public GetDashboardResponse getDashboard() {
+        return new GetDashboardResponse(schedulerState);
     }
 }
