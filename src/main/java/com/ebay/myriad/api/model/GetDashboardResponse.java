@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
-
 public class GetDashboardResponse {
     private SchedulerState schedulerState;
 
@@ -39,7 +38,7 @@ public class GetDashboardResponse {
         this.schedulerState = schedulerState;
     }
 
-    @JsonProperty
+    @JsonProperty("pending")
     public Collection<String> getPendingTasks() {
         Set<String> taskIds = new TreeSet<String>();
         for( Protos.TaskID taskId: this.schedulerState.getPendingTaskIds() ){
@@ -48,7 +47,7 @@ public class GetDashboardResponse {
         return taskIds;
     }
 
-    @JsonProperty
+    @JsonProperty("staging")
     public Collection<String> getStagingTasks() {
         Set<String> taskIds = new TreeSet<String>();
         for( Protos.TaskID taskId: this.schedulerState.getStagingTaskIds()){
@@ -57,7 +56,7 @@ public class GetDashboardResponse {
         return taskIds;
     }
 
-    @JsonProperty
+    @JsonProperty("killable")
     public Collection<String> getKillableTasks() {
         Set<String> taskIds = new TreeSet<String>();
         for( Protos.TaskID taskId : this.schedulerState.getKillableTasks() ){
@@ -66,7 +65,7 @@ public class GetDashboardResponse {
         return taskIds;
     }
 
-    @JsonProperty
+    @JsonProperty("active")
     public Collection<NodeTask> getActiveTasks() {
         return this.schedulerState.getActiveTasks();
     }
@@ -74,7 +73,7 @@ public class GetDashboardResponse {
     // TODO does this really belong here?
     // Not sure where collection of Clusters is and Cluster
     // class generates no Json
-    @JsonProperty
+    @JsonProperty("clusters")
     public Collection<Cluster> getClusters() {
         return Collections.EMPTY_LIST;
     }
