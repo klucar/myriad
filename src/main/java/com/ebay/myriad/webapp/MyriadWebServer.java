@@ -25,7 +25,7 @@ public class MyriadWebServer {
 
         ServletHandler servletHandler = new ServletHandler();
 
-        String filterName = "GuiceFilter";
+        String filterName = "MyriadGuiceFilter";
         FilterHolder holder = new FilterHolder(filter);
         holder.setName(filterName);
 

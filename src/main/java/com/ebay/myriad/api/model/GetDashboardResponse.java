@@ -40,26 +40,22 @@ public class GetDashboardResponse {
 
     @JsonProperty("pending")
     public Collection<String> getPendingTasks() {
-        Set<String> taskIds = new TreeSet<String>();
-        for( Protos.TaskID taskId: this.schedulerState.getPendingTaskIds() ){
-            taskIds.add(taskId.getValue());
-        }
-        return taskIds;
+        return getTaskIds(this.schedulerState.getPendingTaskIds());
     }
 
     @JsonProperty("staging")
     public Collection<String> getStagingTasks() {
-        Set<String> taskIds = new TreeSet<String>();
-        for( Protos.TaskID taskId: this.schedulerState.getStagingTaskIds()){
-            taskIds.add(taskId.getValue());
-        }
-        return taskIds;
+        return getTaskIds(this.schedulerState.getStagingTaskIds());
     }
 
     @JsonProperty("killable")
     public Collection<String> getKillableTasks() {
+        return getTaskIds(this.schedulerState.getKillableTasks());
+    }
+
+    private Collection<String> getTaskIds(Collection<Protos.TaskID> tasks){
         Set<String> taskIds = new TreeSet<String>();
-        for( Protos.TaskID taskId : this.schedulerState.getKillableTasks() ){
+        for( Protos.TaskID taskId : tasks ){
             taskIds.add(taskId.getValue());
         }
         return taskIds;

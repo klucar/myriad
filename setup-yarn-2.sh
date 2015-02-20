@@ -10,7 +10,8 @@ fi
 
 sudo tar vxzf hadoop-${HADOOP_VER}.tar.gz -C /usr/local
 cd /usr/local
-sudo mv hadoop-${HADOOP_VER} hadoop
+sudo rm -rf hadoop
+sudo mv -f hadoop-${HADOOP_VER} hadoop
 sudo chown -R hduser:hadoop hadoop
 
 # Init bashrc with hadoop env variables
@@ -27,7 +28,7 @@ sudo sh -c 'echo export HADOOP_OPTS=\"-Djava.library.path=\$HADOOP_INSTALL/lib\"
 
 # Modify JAVA_HOME in hadoop-env
 cd /usr/local/hadoop/etc/hadoop
-sudo -u hduser sed -i.bak s=\${JAVA_HOME}=/usr/lib/jvm/java-8-oracle/=g hadoop-env.sh
+sudo -u hduser sed -i.bak s=\${JAVA_HOME}="$JAVA_HOME"=g hadoop-env.sh
 pwd
 
 /usr/local/hadoop/bin/hadoop version
@@ -40,8 +41,8 @@ sudo -u hduser cp mapred-site.xml.template mapred-site.xml
 sudo -u hduser sed -i.bak 's=<configuration>=<configuration>\<property>\<name>mapreduce\.framework\.name</name>\<value>yarn</value>\</property>=g' mapred-site.xml
 
 cd ~
-sudo -u hduser sh -c 'mkdir -p mydata/hdfs/namenode'
-sudo -u hduser sh -c 'mkdir -p mydata/hdfs/datanode'
+sudo -u hduser sh -c 'mkdir -p ~/mydata/hdfs/namenode'
+sudo -u hduser sh -c 'mkdir -p ~/mydata/hdfs/datanode'
 sudo chown -R hduser:hadoop /home/hduser/mydata
 
 cd /usr/local/hadoop/etc/hadoop
@@ -62,3 +63,4 @@ sudo -u hduser sh -c '/usr/local/hadoop/sbin/mr-jobhistory-daemon.sh start histo
 
 # Check status
 sudo -u hduser -u hduser jps
+
