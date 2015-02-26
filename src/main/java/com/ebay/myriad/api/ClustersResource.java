@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -63,8 +64,15 @@ public class ClustersResource {
                 "request object cannot be null or empty");
 
         // TODO(mohit): Validation
+        LOGGER.info("Received Flexup Cluster Request");
+
+
         Integer instances = request.getInstances();
         String profile = request.getProfile();
+
+        LOGGER.info("Instances: ", instances);
+        LOGGER.info("Profile: ", profile);
+
         this.myriadOperations.flexUpCluster(instances, profile);
         return Response.ok().build();
     }

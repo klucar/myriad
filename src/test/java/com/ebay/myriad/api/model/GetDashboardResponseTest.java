@@ -31,7 +31,7 @@ public class GetDashboardResponseTest {
 
     @Test
     public void testResponseJson(){
-        GetDashboardResponse gdr = new GetDashboardResponse(this.mockSchedulerState);
+
 
     }
 
