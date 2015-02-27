@@ -1,16 +1,15 @@
 # Myriad Configuration Properties
 
-Myriad's component that plugs into Resource Manager, exposes configuration properties that admins can modify. 
+Myriad Scheduler (the component that plugs into Resource Manager process), exposes configuration properties that admins can modify. 
 It expects a file ```myriad-config-default.yml``` to be present on the Resource Manager's java classpath. 
 
-* A good practice is to place this file under ```$YARN_HOME/etc/hadoop/```, since this directory holds 
-YARN's configuration files and is already present on Resource Manager's classpath.
+Currently, this file is built into Myriad Scheduler jar. So, if you need to modify some of the properties in this file, please modify them **before** building Myriad Scheduler.
 
 ## Properties
 
 ```yaml
 
-# Address of the mesos master
+# Address of the mesos master - <IP:port> or ZooKeeper path
 mesosMaster: 10.0.2.15:5050
 # mesosMaster: zk://10.0.2.15:2181/mesos
 
@@ -61,6 +60,7 @@ executor:
 
 # Environment variables required to launch Node Manager process. Admin can also pass other environment variables to NodeManager.
 yarnEnvironment:
-  YARN_HOME: /usr/local/hadoop
+  YARN_HOME: /usr/local/hadoop # Or /opt/mapr/hadoop/hadoop-2.5.1/ if using MapR's Hadoop
+  YARN_NODEMANAGER_OPTS: -Dnodemanager.resource.io-spindles=4.0 # Required only if using MapR's Hadoop
 
 ```
