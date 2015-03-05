@@ -86,6 +86,23 @@ task copyRunTimeDeps(type: Sync) {
     into "$buildDir/libs"
 }
 
+processResources {
+    exclude ('*/node_modules/**')
+}
+
+sourceSets {
+    main {
+        resources {
+            include 'webapp/public/**'
+            exclude 'webapp/node_modules/**'
+            exclude 'webapp/css'
+            exclude 'webapp/img'
+            exclude 'webapp/js'
+            exclude 'webapp/*.*'
+        }
+    }
+}
+
 jar {
     dependsOn copyRunTimeDeps
 }
