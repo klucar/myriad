@@ -93,6 +93,7 @@ processResources {
 sourceSets {
     main {
         resources {
+            include '*.*'
             include 'webapp/public/**'
             exclude 'webapp/node_modules/**'
             exclude 'webapp/css'
