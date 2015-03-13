@@ -20,12 +20,21 @@ import org.apache.mesos.Protos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Represents the state of the Myriad scheduler
+ */
 public class SchedulerState {
-    private final static Logger LOGGER = LoggerFactory
-            .getLogger(SchedulerState.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerState.class);
 
     private Map<Protos.TaskID, NodeTask> tasks;
     private Set<Protos.TaskID> pendingTasks;
@@ -172,15 +181,18 @@ public class SchedulerState {
         return this.lostTasks;
     }
 
-    public MyriadState getMyriadState() { return this.myriadState; }
+    public MyriadState getMyriadState() {
+        return this.myriadState;
+    }
 
     public Collection<Protos.TaskStatus> getTaskStatuses() {
         Collection<Protos.TaskStatus> taskStatuses = new ArrayList<>(this.tasks.size());
         Collection<NodeTask> tasks = this.tasks.values();
         for (NodeTask task : tasks) {
             Protos.TaskStatus taskStatus = task.getTaskStatus();
-            if (taskStatus != null)
+            if (taskStatus != null) {
                 taskStatuses.add(taskStatus);
+            }
         }
 
         return taskStatuses;

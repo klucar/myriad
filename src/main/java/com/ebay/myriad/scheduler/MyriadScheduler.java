@@ -17,7 +17,16 @@ package com.ebay.myriad.scheduler;
 
 import com.ebay.myriad.DisruptorManager;
 import com.ebay.myriad.configuration.MyriadConfiguration;
-import com.ebay.myriad.scheduler.event.*;
+import com.ebay.myriad.scheduler.event.DisconnectedEvent;
+import com.ebay.myriad.scheduler.event.ErrorEvent;
+import com.ebay.myriad.scheduler.event.ExecutorLostEvent;
+import com.ebay.myriad.scheduler.event.FrameworkMessageEvent;
+import com.ebay.myriad.scheduler.event.OfferRescindedEvent;
+import com.ebay.myriad.scheduler.event.ReRegisteredEvent;
+import com.ebay.myriad.scheduler.event.RegisteredEvent;
+import com.ebay.myriad.scheduler.event.ResourceOffersEvent;
+import com.ebay.myriad.scheduler.event.SlaveLostEvent;
+import com.ebay.myriad.scheduler.event.StatusUpdateEvent;
 import com.lmax.disruptor.EventTranslator;
 import org.apache.mesos.Protos;
 import org.apache.mesos.Scheduler;
@@ -26,6 +35,9 @@ import org.apache.mesos.SchedulerDriver;
 import javax.inject.Inject;
 import java.util.List;
 
+/**
+ * Myriad Scheduler
+ */
 public class MyriadScheduler implements Scheduler {
     private DisruptorManager disruptorManager;
 
@@ -108,7 +120,8 @@ public class MyriadScheduler implements Scheduler {
 
     @Override
     public void frameworkMessage(final SchedulerDriver driver,
-                                 final Protos.ExecutorID executorId, final Protos.SlaveID slaveId,
+                                 final Protos.ExecutorID executorId,
+                                 final Protos.SlaveID slaveId,
                                  final byte[] bytes) {
         disruptorManager.getFrameworkMessageEventDisruptor().publishEvent(
                 new EventTranslator<FrameworkMessageEvent>() {
@@ -150,7 +163,8 @@ public class MyriadScheduler implements Scheduler {
 
     @Override
     public void executorLost(final SchedulerDriver driver,
-                             final Protos.ExecutorID executorId, final Protos.SlaveID slaveId,
+                             final Protos.ExecutorID executorId,
+                             final Protos.SlaveID slaveId,
                              final int exitStatus) {
         disruptorManager.getExecutorLostEventDisruptor().publishEvent(
                 new EventTranslator<ExecutorLostEvent>() {

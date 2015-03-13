@@ -16,7 +16,7 @@ Myriad requires two components to be built:
 To build Myriad Scheduler run:
 
 ```bash
-gradlew build
+./gradlew build
 ```
 
 This will build myriad-x.x.x.jar and download the runtime jars and place them inside ```PROJECT_HOME/build/libs/``` directory.
@@ -25,7 +25,7 @@ This will build myriad-x.x.x.jar and download the runtime jars and place them in
 To build self-contained executor jar, run:
 
 ```bash
-gradlew capsuleExecutor
+./gradlew capsuleExecutor
 ```
 
 This will build myriad-executor-x.x.x.jar and place it inside ```PROJECT_HOME/build/libs/``` directory. 
@@ -37,7 +37,7 @@ To deploy Myriad Scheduler, please follow the below steps:
 1. Build Myriad Scheduler
 2. Copy all jars under ```PROJECT_HOME/build/libs/``` directory, to YARN ResourceManager's classpath. For ex: Copy all jars to ```$YARN_HOME/share/hadoop/yarn/lib/```
 
-### Deploying Myriad Scheduler
+### Deploying Myriad Executor
 To deploy Myriad Executor, please follow the below steps:
 
 1. Build Myriad Executor

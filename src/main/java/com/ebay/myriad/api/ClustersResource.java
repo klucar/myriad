@@ -35,10 +35,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * RESTful API to resource manager
+ */
 @Path("/cluster")
 public class ClustersResource {
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(ClustersResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClustersResource.class);
 
     private MyriadConfiguration cfg;
     private SchedulerState schedulerState;
@@ -46,8 +48,10 @@ public class ClustersResource {
     private MyriadOperations myriadOperations;
 
     @Inject
-    public ClustersResource(MyriadConfiguration cfg, SchedulerState state,
-                            NMProfileManager profileManager, MyriadOperations myriadOperations) {
+    public ClustersResource(MyriadConfiguration cfg,
+                            SchedulerState state,
+                            NMProfileManager profileManager,
+                            MyriadOperations myriadOperations) {
         this.cfg = cfg;
         this.schedulerState = state;
         this.profileManager = profileManager;

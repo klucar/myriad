@@ -19,6 +19,7 @@ import com.ebay.myriad.state.NodeTask;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.mesos.Protos;
 import org.apache.mesos.Protos.Attribute;
 import org.apache.mesos.Protos.Offer;
 import org.slf4j.Logger;
@@ -28,18 +29,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Provides utilities for scheduling with the mesos offers
+ */
 public class SchedulerUtils {
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(SchedulerUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerUtils.class);
 
-    public static boolean isMatchSlaveAttributes(Offer offer,
-                                                 Map<String, String> requestAttributes) {
+    public static boolean isMatchSlaveAttributes(Offer offer, Map<String, String> requestAttributes) {
         boolean match = true;
 
         Map<String, String> offerAttributes = new HashMap<>();
         for (Attribute attribute : offer.getAttributesList()) {
-            offerAttributes.put(attribute.getName(), attribute.getText()
-                    .getValue());
+            offerAttributes.put(attribute.getName(), attribute.getText().getValue());
         }
 
         // Match with offer attributes only if request has attributes.
@@ -53,7 +54,7 @@ public class SchedulerUtils {
         return match;
     }
 
-    public static boolean isUniqueHostname(Offer offer,
+    public static boolean isUniqueHostname(Protos.OfferOrBuilder offer,
                                            Collection<NodeTask> tasks) {
         Preconditions.checkArgument(offer != null);
         String offerHostname = offer.getHostname();
@@ -67,8 +68,7 @@ public class SchedulerUtils {
                 uniqueHostname = false;
             }
         }
-        LOGGER.debug("Offer's hostname {} is unique: {}", offerHostname,
-                uniqueHostname);
+        LOGGER.debug("Offer's hostname {} is unique: {}", offerHostname, uniqueHostname);
         return uniqueHostname;
     }
 }

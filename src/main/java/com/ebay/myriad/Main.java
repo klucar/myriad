@@ -22,7 +22,11 @@ import com.ebay.myriad.configuration.MyriadConfiguration;
 import com.ebay.myriad.health.MesosDriverHealthCheck;
 import com.ebay.myriad.health.MesosMasterHealthCheck;
 import com.ebay.myriad.health.ZookeeperHealthCheck;
-import com.ebay.myriad.scheduler.*;
+import com.ebay.myriad.scheduler.MyriadDriverManager;
+import com.ebay.myriad.scheduler.NMProfile;
+import com.ebay.myriad.scheduler.NMProfileManager;
+import com.ebay.myriad.scheduler.Rebalancer;
+import com.ebay.myriad.scheduler.TaskTerminator;
 import com.ebay.myriad.scheduler.yarn.interceptor.InterceptorRegistry;
 import com.ebay.myriad.webapp.MyriadWebServer;
 import com.ebay.myriad.webapp.WebAppGuiceModule;
@@ -41,6 +45,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Main entry point for myriad scheduler
+ *
+ */
 public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
@@ -66,8 +74,8 @@ public class Main {
                     InterceptorRegistry registry) throws Exception {
         MyriadModule myriadModule = new MyriadModule(cfg, hadoopConf, yarnScheduler, registry);
         Injector injector = Guice.createInjector(
-            myriadModule,
-            new WebAppGuiceModule());
+                myriadModule,
+                new WebAppGuiceModule());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Bindings: " + injector.getAllBindings());
@@ -77,8 +85,9 @@ public class Main {
 
         initWebApp(injector);
         initHealthChecks(injector);
-        initProfiles(cfg, injector);
+        initProfiles(injector);
         initDisruptors(injector);
+
         initRebalancerService(cfg, injector);
         initTerminatorService(injector);
         startMesosDriver(injector);
@@ -116,28 +125,22 @@ public class Main {
                 injector.getInstance(MesosDriverHealthCheck.class));
     }
 
-    private void initProfiles(final MyriadConfiguration cfg,
-                              Injector injector) {
+    private void initProfiles(Injector injector) {
         LOGGER.info("Initializing Profiles");
-        NMProfileManager profileManager = injector
-                .getInstance(NMProfileManager.class);
-        Map<String, Map<String, String>> profiles = cfg.getProfiles();
+        NMProfileManager profileManager = injector.getInstance(NMProfileManager.class);
+        Map<String, Map<String, String>> profiles = injector.getInstance(MyriadConfiguration.class).getProfiles();
         if (MapUtils.isNotEmpty(profiles)) {
-            for (String profileKey : profiles.keySet()) {
-                Map<String, String> profileResourceMap = profiles
-                        .get(profileKey);
+            for (Map.Entry<String, Map<String, String>> profile : profiles.entrySet()) {
+                Map<String, String> profileResourceMap = profile.getValue();
                 if (MapUtils.isNotEmpty(profiles)
                         && profileResourceMap.containsKey("cpu")
                         && profileResourceMap.containsKey("mem")) {
-                    Long cpu = Long.parseLong(profileResourceMap
-                            .get("cpu"));
-                    Long mem = Long.parseLong(profileResourceMap
-                            .get("mem"));
+                    Long cpu = Long.parseLong(profileResourceMap.get("cpu"));
+                    Long mem = Long.parseLong(profileResourceMap.get("mem"));
 
-                    profileManager.add(new NMProfile(profileKey, cpu, mem));
+                    profileManager.add(new NMProfile(profile.getKey(), cpu, mem));
                 } else {
-                    LOGGER.error("Invalid definition for profile: "
-                            + profileKey);
+                    LOGGER.error("Invalid definition for profile: " + profile.getKey());
                 }
             }
         }
@@ -146,9 +149,10 @@ public class Main {
     private void initTerminatorService(Injector injector) {
         LOGGER.info("Initializing Terminator");
         terminatorService = Executors.newScheduledThreadPool(1);
+        final int initialDelay = 100;
+        final int period = 2000;
         terminatorService.scheduleAtFixedRate(
-                injector.getInstance(TaskTerminator.class), 100, 2000,
-                TimeUnit.MILLISECONDS);
+                injector.getInstance(TaskTerminator.class), initialDelay, period, TimeUnit.MILLISECONDS);
     }
 
     private void initRebalancerService(MyriadConfiguration cfg,
@@ -156,9 +160,10 @@ public class Main {
         if (cfg.isRebalancer()) {
             LOGGER.info("Initializing Rebalancer");
             rebalancerService = Executors.newScheduledThreadPool(1);
+            final int initialDelay = 100;
+            final int period = 5000;
             rebalancerService.scheduleAtFixedRate(
-                    injector.getInstance(Rebalancer.class), 100, 5000,
-                    TimeUnit.MILLISECONDS);
+                    injector.getInstance(Rebalancer.class), initialDelay, period, TimeUnit.MILLISECONDS);
         } else {
             LOGGER.info("Rebalancer is not turned on");
         }
