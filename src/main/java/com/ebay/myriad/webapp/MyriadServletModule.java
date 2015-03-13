@@ -18,6 +18,7 @@ public class MyriadServletModule extends ServletModule {
 
         bind(GuiceContainer.class);
         bind(JacksonJaxbJsonProvider.class).in(Scopes.SINGLETON);
-        serve("/*").with(GuiceContainer.class);
+
+        serve("/api/*").with(GuiceContainer.class);
     }
 }

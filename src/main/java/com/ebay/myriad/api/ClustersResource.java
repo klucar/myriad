@@ -35,7 +35,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/api/cluster")
+@Path("/cluster")
 public class ClustersResource {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ClustersResource.class);

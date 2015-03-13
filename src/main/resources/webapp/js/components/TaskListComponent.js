@@ -5,14 +5,14 @@ var TaskListComponent = React.createClass({
 
   render: function () {
 
-    // props: name, tasks
+    // props: name, taskNames
     var html = [];
-    html.push( <h2>{this.props.name}</h2> );
-    for( var ii=0; ii < tasks.length; ii ++ ) {
-      html.push(<pre>{tasks[ii]}</pre>);
+    html.push( <h3 key={this.props.name}>{this.props.name}</h3> );
+    for( var ii=0; ii < this.props.taskNames.length; ii++ ) {
+      html.push(<li key={this.props.taskNames[ii]}>{this.props.taskNames[ii]}</li>);
     }
 
-    return (html);
+    return (<ul>{html}</ul>);
    }
 
 });

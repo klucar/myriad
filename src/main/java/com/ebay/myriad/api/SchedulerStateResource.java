@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-@Path("/api/state")
+@Path("/state")
 @Produces(MediaType.APPLICATION_JSON)
 public class SchedulerStateResource {
     private MyriadConfiguration cfg;

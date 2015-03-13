@@ -40,7 +40,13 @@ public class MyriadWebServer {
         context.setServletHandler(servletHandler);
         context.addServlet(DefaultServlet.class, "/");
 
+        String staticDir = this.getClass().getClassLoader().getResource("webapp/public").toExternalForm();
+        context.setResourceBase(staticDir);
+
         this.jetty.addHandler(context);
         this.jetty.start();
     }
+
+
+
 }
