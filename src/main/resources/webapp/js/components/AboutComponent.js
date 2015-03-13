@@ -18,8 +18,8 @@ var AboutComponent = React.createClass({
         <p>
           Myriad can either be controlled with this user interface or the underlying REST API.
         </p>
-        <div className="well">
-          <p> {JSON.stringify(this.props.wadl, null, ' ')} </p>
+        <div>
+          <pre>{JSON.stringify(this.props.wadl, null, ' ')}</pre>
         </div>
 
       </div>

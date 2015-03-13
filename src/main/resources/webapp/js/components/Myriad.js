@@ -39,7 +39,7 @@ var Myriad = React.createClass({
            } else {
              alert('Oh no! error on GET api/state ' + res.text);
            }
-         });
+         }.bind(this));
 
     request.get('/api/config')
       .end(function(err, res){
@@ -50,7 +50,7 @@ var Myriad = React.createClass({
            } else {
              alert('Oh no! error on GET api/config ' + res.text);
            }
-         });
+         }.bind(this));
 
     request.get('/api/application.wadl')
       .end(function(err, res){
@@ -58,17 +58,17 @@ var Myriad = React.createClass({
            console.log(res);
            if (!err) {
              // the wadl is in XML, xlate to JSON
-             parseString(res.body, function(err, json){
+             parseString(res.text, function(err, json){
                 if( !err ) {
-                  this.setState({"wadl":json })
+                  this.setState({"wadl": json})
                 } else {
                   alert("Error parsing xml to json");
                 }
-             })
+             }.bind(this))
            } else {
              alert('Oh no! error on GET api/application.wadl ' + res.text);
            }
-         });
+         }.bind(this));
 
   },
 /*
