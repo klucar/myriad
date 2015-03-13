@@ -2,7 +2,8 @@ var React = require('react');
 var ReactBootstrap = require('react-bootstrap')
   , Input = ReactBootstrap.Input
   , Row = ReactBootstrap.Row
-  , Col = ReactBootstrap.Col;
+  , Col = ReactBootstrap.Col
+  , Button = ReactBootstrap.Button;
 
 // PUT api/clusters/flexdown { "instances":1 }//
 // props: profiles
@@ -23,7 +24,7 @@ var FlexDownComponent = React.createClass({
         </Row>
         <Row>
           <Col md={2} mdOffset={5} >
-            <Input type="submit" value="Flex Down" />
+              <Button bsStyle="primary" bsSize="large">Flex Down</Button>
           </Col>
         </Row>
 

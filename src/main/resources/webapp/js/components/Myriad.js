@@ -37,7 +37,7 @@ var Myriad = React.createClass({
            if (!err) {
              this.setState( {"tasks": res.body});
            } else {
-             alert('Oh no! error on GET api/state ' + res.text);
+             console.log('Oh no! error on GET api/state ' + res.text);
            }
          }.bind(this));
 
@@ -48,7 +48,7 @@ var Myriad = React.createClass({
            if (!err) {
              this.setState( {"config": res.body});
            } else {
-             alert('Oh no! error on GET api/config ' + res.text);
+             console.log('Oh no! error on GET api/config ' + res.text);
            }
          }.bind(this));
 
@@ -62,11 +62,11 @@ var Myriad = React.createClass({
                 if( !err ) {
                   this.setState({"wadl": json})
                 } else {
-                  alert("Error parsing xml to json");
+                  console.log("Error parsing xml to json for .wadl");
                 }
              }.bind(this))
            } else {
-             alert('Oh no! error on GET api/application.wadl ' + res.text);
+             console.log('Oh no! error on GET api/application.wadl ' + res.text);
            }
          }.bind(this));
 
