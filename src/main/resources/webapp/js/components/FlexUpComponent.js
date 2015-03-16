@@ -54,7 +54,6 @@ var FlexUpComponent = React.createClass({
 
   handleInstanceChange: function() {
     var instances = this.refs.instances.getDOMNode().value;
-    console.log("Changed Instances to: " + instances);
     this.setState({numInstances: instances});
   },
 
@@ -74,8 +73,6 @@ var FlexUpComponent = React.createClass({
     .set('Content-Type', 'application/json')
     .send({ "profile": size, "instances": instances})
     .end(function(err, res){
-           console.log("Result from api/clusterflexup");
-           console.log(res);
            if (!err) {
              console.log("flexup successful!");
            } else {
@@ -137,7 +134,5 @@ var FlexUpComponent = React.createClass({
    )}
 
   });
-
-            //<Input type="submit" value="Flex Up" />
 
 module.exports = FlexUpComponent;

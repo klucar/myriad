@@ -24,38 +24,45 @@ var Myriad = React.createClass({
                        "stagingTasks":["staging 1"],
                        "activeTasks":["active 1", "active 2"],
                        "killableTasks":["killable 1"]},
-               wadl: "application.wadl not defined."
+               wadl: "application.wadl not defined.",
+               isPolling: false,
+               pollInterval: 2000
                }; // Update from store or event.
 
   },
 
-  componentWillMount: function () {
+  fetchState: function () {
     request.get('/api/state')
       .end(function(err, res){
-           console.log("Result from api/state");
-           console.log(res);
            if (!err) {
              this.setState( {"tasks": res.body});
            } else {
              console.log('Oh no! error on GET api/state ' + res.text);
            }
+           if( this.state.isPolling ){
+             setTimeout(this.fetchState, this.state.pollInterval);
+           }
          }.bind(this));
+  },
 
+  fetchConfig: function () {
     request.get('/api/config')
       .end(function(err, res){
-           console.log("Result from api/config");
-           console.log(res);
            if (!err) {
              this.setState( {"config": res.body});
            } else {
              console.log('Oh no! error on GET api/config ' + res.text);
            }
+           if( this.state.isPolling ){
+            setTimeout(this.fetchConfig, this.state.pollInterval);
+           }
          }.bind(this));
+  },
 
+
+  fetchApi: function () {
     request.get('/api/application.wadl')
       .end(function(err, res){
-           console.log("Result from application.wadl");
-           console.log(res);
            if (!err) {
              // the wadl is in XML, xlate to JSON
              parseString(res.text, function(err, json){
@@ -69,14 +76,20 @@ var Myriad = React.createClass({
              console.log('Oh no! error on GET api/application.wadl ' + res.text);
            }
          }.bind(this));
-
   },
-/*
+
+  componentWillMount: function () {
+    this.fetchApi();
+  },
+
   componentDidMount: function () {
-
-
+    // start polling
+    this.setState({isPolling: true});
+    this.fetchConfig();
+    this.fetchState();
   },
 
+/*
   shouldComponentUpdate: function() {
 
   },
