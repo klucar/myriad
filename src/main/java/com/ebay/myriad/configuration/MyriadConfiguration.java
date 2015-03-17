@@ -123,11 +123,32 @@ public class MyriadConfiguration {
     @NotEmpty
     private Map<String, String> yarnEnvironment;
 
+
+    public MyriadConfiguration(){}
+
+    protected MyriadConfiguration(MyriadConfiguration other) {
+        this.mesosMaster = other.getMesosMaster();
+        this.checkpoint = other.isCheckpoint();
+        this.frameworkFailoverTimeout = other.getFrameworkFailoverTimeout();
+        this.frameworkName = other.getFrameworkName();
+        this.frameworkRole = other.getFrameworkRole();
+        this.profiles = other.getProfiles();
+        this.rebalancer = other.isRebalancer();
+        this.nodemanager = other.getNodeManagerConfiguration();
+        this.executor = other.getMyriadExecutorConfiguration();
+        this.nativeLibrary = other.getNativeLibrary();
+        this.zkServers = other.getZkServers();
+        this.zkTimeout = other.getZkTimeout();
+        this.restApiPort = other.getRestApiPort();
+        this.yarnEnvironment = other.getYarnEnvironment();
+    }
+
+
     public String getMesosMaster() {
         return mesosMaster;
     }
 
-    public Boolean getCheckpoint() {
+    public Boolean isCheckpoint() {
         return this.checkpoint != null ? checkpoint : DEFAULT_CHECKPOINT;
     }
 
@@ -147,10 +168,6 @@ public class MyriadConfiguration {
 
     public Map<String, Map<String, String>> getProfiles() {
         return profiles;
-    }
-
-    public Boolean isCheckpoint() {
-        return checkpoint != null ? checkpoint : DEFAULT_CHECKPOINT;
     }
 
     public Boolean isRebalancer() {

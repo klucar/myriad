@@ -16,30 +16,17 @@
 package com.ebay.myriad.api.model;
 
 import com.ebay.myriad.configuration.MyriadConfiguration;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.Map;
 
 /**
  * The current configuration of Myriad
  */
-public class GetConfigurationResponse {
-    private MyriadConfiguration cfg;
-
+public class GetConfigurationResponse extends MyriadConfiguration {
     public GetConfigurationResponse() {
+        super();
     }
 
     public GetConfigurationResponse(MyriadConfiguration cfg) {
-        this.cfg = cfg;
+        super(cfg);
     }
 
-    @JsonProperty
-    public String getMesosMaster() {
-        return cfg.getMesosMaster();
-    }
-
-    @JsonProperty
-    public Map<String, Map<String, String>> getProfiles() {
-        return cfg.getProfiles();
-    }
 }
