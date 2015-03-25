@@ -126,6 +126,9 @@ public class MyriadConfiguration {
 
     public MyriadConfiguration(){}
 
+    /*
+        Copy constructor used by rest api to map this config to GetConfigurationResponse
+     */
     protected MyriadConfiguration(MyriadConfiguration other) {
         this.mesosMaster = other.getMesosMaster();
         this.checkpoint = other.isCheckpoint();
